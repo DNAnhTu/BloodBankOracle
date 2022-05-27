@@ -129,10 +129,8 @@
             $dreport = $_POST['dreport'];
             $area = $_POST['area'];
             $bamount = $_POST['bamount'];
-            
             $conn = oci_connect('TESTORACLE', 'Tu01228671340', 'localhost/XE:BloodBank', 'AL32UTF8');
-                
-            $query = "INSERT INTO blood_request(blood_request_id, b_id, name, phone, email, blood_group, hospital, delivery_confirmation, address, area, blood_amount) VALUES (b_request.nextval, $branch, '$name', '$phone', '$email', '$bg', '$hname', '$dreport', '$address', '$area', '$bamount')";
+            $query = "INSERT INTO blood_request(blood_request_id, b_id, name, phone, email, blood_group, hospital, delivery_confirmation, address, area, blood_amount_rq) VALUES (b_request.nextval, $branch, '$name', '$phone', '$email', '$bg', '$hname', '$dreport', '$address', '$area', '$bamount')";
 
                $stid = oci_parse($conn, $query);
                
@@ -200,16 +198,15 @@
         
         <p id="pcat" class="form-text">Blood Group : </p>
              <select name="bg">
-                 <?php
+                <?php
                     $conn = oci_connect('TESTORACLE', 'Tu01228671340', 'localhost/XE:BloodBank', 'AL32UTF8');
 
                    $stid = oci_parse($conn, "SELECT * FROM blood ORDER BY blood_group ASC");
                    oci_execute($stid);
-                 
                     while (($row = oci_fetch_array($stid, OCI_BOTH)) != false) {
-                        echo "<option value=\"".$row['BLOOD_GROUP']."\">".$row['BLOOD_GROUP']."</option>";
+                        echo "<option value=\"".$row['BLOOD_GROUP']."\">".$row['BLOOD_GROUP']." ". $nombre_format_francais = number_format($row['PAID_AMOUNT'], 0, '.','.')." VND /".$row['BLOOD_AMOUNT']." ML</option>";
                     }
-                 ?>
+                ?>
             </select>
         
         <p class="form-text">Hospital : 
@@ -241,7 +238,7 @@
             <span class="error" style="color: red;"><?php echo isset($bamountErr) ? $bamountErr : '' ;?></span>
         </p>
         <input name="bamount" class="form-field" type="text" placeholder="Blood Amount">
-        
+
         <br>
         <input type="submit" name="submit" id="submit" value="Add New Request" class="form-field">
         

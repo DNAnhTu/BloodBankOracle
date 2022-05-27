@@ -43,7 +43,6 @@
 <div class="donor-section" style="width: 50%;">
     <h1 class="menu-title">Blood Requests: </h1>
     <a href="add-request.php" class="hlink cat-link" style="margin-left: 25px;">Add New Blood Request</a>
-    
     <?php
     /*
         $conn = oci_connect('TESTORACLE', 'Tu01228671340', 'localhost/XE:BloodBank');
@@ -54,9 +53,7 @@
 
         $stid = oci_parse($conn, 'SELECT * FROM blood_request');
         oci_execute($stid);
-    
-    
-    
+
         echo '<table class="tbls-bloodrequest">
             <tr>
             <td>Name</td>
@@ -90,7 +87,7 @@
         }
      echo '</table>';*/
      ?>
-     <div class="module" style="width: 155%; margin-left:20px;">
+     <div class="module" style="width: 155%; margin-left:15px;">
          <div class="module-body table" style="width: 100%; display:inline-block">
          <?php
              $conn = oci_connect('TESTORACLE', 'Tu01228671340', 'localhost/XE:BloodBank', 'AL32UTF8');
@@ -99,7 +96,7 @@
                  trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
              }
      
-            $stid = oci_parse($conn, 'SELECT * FROM blood_request');
+            $stid = oci_parse($conn, 'SELECT * FROM BLOOD INNER JOIN blood_request ON blood.blood_group = blood_request.blood_group ');
             oci_execute($stid);
          ?>
              <table cellpadding="0" cellspacing="0" border="0"  style="width:100%;" class="datatable-1 table table-bordered table-striped" id="table-blood_request">
@@ -109,13 +106,14 @@
                         <th>Name</th>
                         <th>Phone</th>
                         <th>Email</th>
-                        <th style="width:100px ;">Branch</th>
+                        <th>Branch</th>
                         <th>Hospital</th>
-                        <th>Confirmation</th>
-                        <th>Address</th>
+                        <th>Confirm</th>
+                        <th style="width:100px;">Address</th>
                         <th>Area</th>
                         <th>Blood Group</th>
                         <th>Blood Amount</th>
+                        <th>Total Money</th>
                         <th>Edit</th>
                         <th>Delete</th>
                      </tr>
@@ -139,7 +137,7 @@
                                  <td style="padding: 5px;"><?php echo htmlentities($row['NAME']); ?></td>
                                  <td style="padding: 5px;"><?php echo htmlentities($row['PHONE']); ?></td>
                                  <td style="padding: 5px;"><?php echo htmlentities($row['EMAIL']); ?></td>
-                                 <td style="padding: 5px"><?php echo htmlentities($branch['B_NAME']." ,".$branch['ADDRESS']." ,".$branch['AREA']); ?></td>
+                                 <td style="padding: 5px"> <?php echo htmlentities($branch['B_NAME']." ,".$branch['ADDRESS']." ,".$branch['AREA']); ?></td>
                                  <td style="padding: 5px;"><?php echo htmlentities($row['HOSPITAL']); ?></td>
                                  <td style="padding: 5px;"><?php echo htmlentities($row['DELIVERY_CONFIRMATION']); ?></td>
                                  <td style="padding: 5px;"><?php echo htmlentities($row['ADDRESS']); ?></td>
@@ -147,11 +145,17 @@
                                  <td style="padding: 5px;"><?php echo htmlentities($row['BLOOD_GROUP']); ?></td>
                                  <td style="padding: 5px;">
                                  <?php 
-                                        $nombre_format_francais = number_format($row['BLOOD_AMOUNT'], 0, '.','.');
+                                        $nombre_format_francais = number_format($row['BLOOD_AMOUNT_RQ'], 0, '.','.');
                                         echo $nombre_format_francais;
-                                        //echo htmlentities($row['EMP_SALARY']); 
-                                    ?> ML
+                                    ?> 
+                                    ML
                                 </td>
+                                <td style="padding: 5px;">
+                                    <?php 
+                                    $nombre_format_francais = number_format(($row['BLOOD_AMOUNT_RQ']/$row['BLOOD_AMOUNT'])*$row['PAID_AMOUNT'], 0, '.','.');
+                                    echo $nombre_format_francais;
+                                    ?> 
+                                    VND
                                 </td>
                                  <td style="padding: 5px;"> 
                                      <a id="edit" href="edit-request.php?e=<?php echo $row['BLOOD_REQUEST_ID'] ?>">Edit</a>

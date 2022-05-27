@@ -91,12 +91,12 @@
             trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
         }
 
-        $stid = oci_parse($conn, 'SELECT * FROM blood');
+        $stid = oci_parse($conn, 'SELECT * FROM BLOOD INNER JOIN blood_request ON blood.blood_group = blood_request.blood_group');
         oci_execute($stid);
         $tk = 0;
 
     while (($row = oci_fetch_array($stid, OCI_BOTH)) != false) { 
-        $tk = $tk + $row['PAID_AMOUNT'];
+        $tk = $tk + ($row['BLOOD_AMOUNT_RQ']/$row['BLOOD_AMOUNT'])*$row['PAID_AMOUNT'];
     }
 
     //User
@@ -162,7 +162,7 @@
         </li>
         <li>
             <img src="images/dollar.png" alt="">
-            <p>Transaction : 
+            <p>Total B.Request: 
                 <span class="dash" >
                     <?php
                     $numbers = $tk;

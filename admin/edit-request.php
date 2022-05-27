@@ -141,9 +141,9 @@
                 
             global $e;
             
-            $query = "INSERT INTO blood_request(blood_request_id, b_id, name, phone, email, blood_group, hospital, delivery_confirmation, address, area, blood_amount) VALUES (admin.b_request.nextval, $branch, '$name', '$phone', '$email', '$bg', '$hname', '$dreport', '$address', '$area', '$bamount')";
+            $query = "INSERT INTO blood_request(blood_request_id, b_id, name, phone, email, blood_group, hospital, delivery_confirmation, address, area, blood_amount_rq) VALUES (admin.b_request.nextval, $branch, '$name', '$phone', '$email', '$bg', '$hname', '$dreport', '$address', '$area', '$bamount')";
             
-            $query = "UPDATE blood_request SET b_id ='$branch', name ='$name', phone ='$phone', email ='$email', blood_group ='$bg', hospital ='$hname', delivery_confirmation ='$dreport', address ='$address', area ='$area', blood_amount ='$bamount' WHERE blood_request_id =".$e;
+            $query = "UPDATE blood_request SET b_id ='$branch', name ='$name', phone ='$phone', email ='$email', blood_group ='$bg', hospital ='$hname', delivery_confirmation ='$dreport', address ='$address', area ='$area', blood_amount_rq ='$bamount' WHERE blood_request_id =".$e;
 
             $stid = oci_parse($conn, $query);
                
@@ -236,15 +236,14 @@
                 $var = $row['BLOOD_GROUP'];
                 $sdtt = oci_parse($conn, "SELECT * FROM blood");
                 oci_execute($sdtt);
-                 
                     if($sdtt) {
                         while (($bg = oci_fetch_array($sdtt, OCI_BOTH)) != false) {
                             if($row['BLOOD_GROUP'] == $bg['BLOOD_GROUP'])
                             {
-                                echo "<option selected='selected' value=\"".$bg['BLOOD_GROUP']."\">".$bg['BLOOD_GROUP']."</option>";
+                                echo "<option selected='selected' value=\"".$bg['BLOOD_GROUP']."\">".$bg['BLOOD_GROUP']." ". $nombre_format_francais = number_format($bg['PAID_AMOUNT'], 0, '.','.')." VND /".$bg['BLOOD_AMOUNT']." ML</option>";
                             }
                             else {
-                                echo "<option value=\"".$bg['BLOOD_GROUP']."\">".$bg['BLOOD_GROUP']."</option>";
+                                echo "<option value=\"".$bg['BLOOD_GROUP']."\">".$bg['BLOOD_GROUP']." ". $nombre_format_francais = number_format($bg['PAID_AMOUNT'], 0, '.','.')." VND /".$bg['BLOOD_AMOUNT']." ML</option>";
                             }
                         }
                     } else {
@@ -281,7 +280,7 @@
             <span class="error" style="color: red;"><?php echo isset($error8) ? $error8 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($bamountErr) ? $bamountErr : '' ;?></span>
         </p>
-        <input name="bamount" class="form-field" type="text" placeholder="Blood Amount" value="<?php echo $row['BLOOD_AMOUNT']?>">
+        <input name="bamount" class="form-field" type="text" placeholder="Blood Amount" value="<?php echo $row['BLOOD_AMOUNT_RQ']?>">
         
         <br>
         <input type="submit" name="submit" id="submit" value="Update Request" class="form-field">
