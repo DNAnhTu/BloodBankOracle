@@ -62,7 +62,7 @@ CREATE TABLE blood_request(
    delivery_confirmation varchar2(50),
    address varchar2(100),
    area varchar2(50),
-   blood_amount varchar2(50)
+   blood_amount_rq varchar2(50)
 );
 desc blood_request;
 

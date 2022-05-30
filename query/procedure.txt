@@ -5,6 +5,4 @@ CREATE OR REPLACE PROCEDURE
         BEGIN
             greeting := 'Welcome, ' || name;
         END;
-/
 
-commit;
