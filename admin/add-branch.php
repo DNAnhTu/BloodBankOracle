@@ -125,44 +125,43 @@
 <div class="donor-section">
     <h1 class="menu-title">Add New Branch : </h1>
     <a href="branch.php" class="hlink cat-link">Back to Branch List</a>
-    
-        <form id="add-donor-form" name="donorform" action="add-branch.php" method="post">
+    <form id="add-donor-form" name="donorform" action="add-branch.php" method="post">
        <br>
         <p class="form-text">Branch Name : 
             <span class="error" style="color: red;"><?php echo isset($error1) ? $error1 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($nameErr) ? $nameErr : '' ;?></span>
         </p>
-        <input name="name" class="form-field" type="text" placeholder="Name">
+        <input name="name" class="form-field" type="text" placeholder="Name" value="<?php if(isset($_POST['name'])) {echo htmlentities($_POST['name']);} ?>">
         
         <p class="form-text">Address : 
             <span class="error" style="color: red;"><?php echo isset($error2) ? $error2 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($addressErr) ? $addressErr : '' ;?></span>
         </p>
-        <textarea name="address" id="textarea" class="form-field" cols="30" rows="10" placeholder="Address"></textarea>
+        <textarea name="address" id="textarea" class="form-field" cols="30" rows="10" placeholder="Address"><?php if(isset($_POST['address'])) {echo htmlentities($_POST['address']);} ?></textarea>
         
         <p class="form-text">Area : 
             <span class="error" style="color: red;"><?php echo isset($error3) ? $error3 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($areaErr) ? $areaErr : '' ;?></span>
         </p>
-        <input name="area" class="form-field" type="text" placeholder="Area">
+        <input name="area" class="form-field" type="text" placeholder="Area" value="<?php if(isset($_POST['area'])) {echo htmlentities($_POST['area']);} ?>">
         
         <p class="form-text">Sub Area : 
             <span class="error" style="color: red;"><?php echo isset($error4) ? $error4 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($sub_areaErr) ? $sub_areaErr : '' ;?></span>
         </p>
-        <input name="sub-area" class="form-field" type="text" placeholder="Sub Area">
+        <input name="sub-area" class="form-field" type="text" placeholder="Sub Area" value="<?php if(isset($_POST['sub-area'])) {echo htmlentities($_POST['sub-area']);} ?>">
         
         <p class="form-text">Phone : 
             <span class="error" style="color: red;"><?php echo isset($error5) ? $error5 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($phoneErr) ? $phoneErr : '' ;?></span>
         </p>
-        <input name="phone" class="form-field" type="text" placeholder="Phone">
+        <input name="phone" class="form-field" type="text" placeholder="Phone" value="<?php if(isset($_POST['phone'])) {echo htmlentities($_POST['phone']);} ?>">
         
         <p class="form-text">Email : 
             <span class="error" style="color: red;"><?php echo isset($error6) ? $error6 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($emailErr) ? $emailErr : '' ;?></span>
         </p>
-        <input name="email" class="form-field" type="text" placeholder="Email">
+        <input name="email" class="form-field" type="text" placeholder="Email" value="<?php if(isset($_POST['email'])) {echo htmlentities($_POST['email']);} ?>">
         
         <br>
         <input type="submit" name="submit" id="submit" value="Add Branch" class="form-field">

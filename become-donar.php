@@ -90,13 +90,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         {
             $error8 = "*Required";
         }
+        else{
+            $schedule = test_input($_POST["schedule"]);
+            $date = date_create($schedule);
+            $today = date_create(date("d-m-Y"));
+            if($date < $today)
+            {
+                $errorDate = "*Date should not be in the past";
+            }
+        }
 
-        if(empty($nameErr) && empty($addressErr) && empty($areaErr) && empty($sub_areaErr) && empty($nidErr) && empty($phoneErr) && empty($emailErr)){
-        {
+        if(empty($nameErr) && empty($addressErr) && empty($areaErr) && empty($sub_areaErr) && empty($nidErr) && empty($phoneErr) && empty($emailErr) && empty($errorDate)){
             add_new_donor();
         }
     }
-}
 
     function add_new_donor()
     {
@@ -119,12 +126,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = oci_execute($stid);
 
             if(!$result) {
-                echo "Failed !";
-                //echo $schedule;
+                echo "Failed !";  
             }
             else {
-                //echo "Successfully added New Donor !";
-                //echo "<script>window.location.href='donor.php';</script>";
                 echo "<script>alert('Successfully Become donoar! Thank You');</script>";
             }
         }
@@ -271,26 +275,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <span class="error" style="color: red;"><?php echo isset($error1) ? $error1 : '' ;?></span>
                 <span class="error" style="color: red;"><?php echo isset($nameErr) ? $nameErr : '' ;?></span>
             </p>
-            <input name="name" class="form-field" type="text" placeholder="Name">
+            <input name="name" class="form-field" type="text" placeholder="Name" value="<?php if(isset($_POST['name'])) {echo htmlentities($_POST['name']);} ?>">
 
             <p class="form-text">Address :
                 <span class="error" style="color: red;"><?php echo isset($error2) ? $error2 : '' ;?></span>
                 <span class="error" style="color: red;"><?php echo isset($addressErr) ? $addressErr : '' ;?></span>
             </p>
-            <textarea name="address" id="textarea" class="form-field" cols="30" rows="10"
-                placeholder="Address"></textarea>
+            <textarea name="address" id="textarea" class="form-field" cols="30" rows="10" placeholder="Address"><?php if(isset($_POST['address'])) {echo htmlentities($_POST['address']);} ?></textarea>
 
             <p class="form-text">Area :
                 <span class="error" style="color: red;"><?php echo isset($error3) ? $error3 : '' ;?></span>
                 <span class="error" style="color: red;"><?php echo isset($areaErr) ? $areaErr : '' ;?></span>
             </p>
-            <input name="area" class="form-field" type="text" placeholder="Area">
+            <input name="area" class="form-field" type="text" placeholder="Area" value="<?php if(isset($_POST['area'])) {echo htmlentities($_POST['area']);} ?>">
 
             <p class="form-text">Sub Area :
                 <span class="error" style="color: red;"><?php echo isset($error4) ? $error4 : '' ;?></span>
                 <span class="error" style="color: red;"><?php echo isset($sub_areaErr) ? $sub_areaErr : '' ;?></span>
             </p>
-            <input name="sub-area" class="form-field" type="text" placeholder="Sub Area">
+            <input name="sub-area" class="form-field" type="text" placeholder="Sub Area" value="<?php if(isset($_POST['sub-area'])) {echo htmlentities($_POST['sub-area']);} ?>">
 
             <p id="pcat" class="form-text">Select Branch : </p>
             <select name="branch" style="width: 100%;">
@@ -301,7 +304,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                    oci_execute($stid);
                  
                     while (($row = oci_fetch_array($stid, OCI_BOTH)) != false) {
-                        echo "<option value=\"".$row['B_ID']."\">".$row['B_NAME']." ,".$row['ADDRESS']." ,".$row['SUBAREA']."</option>";
+                        if(isset($_POST['branch']) && $_POST['branch'] == $row['B_ID']) {
+                            echo "<option value=\"".$row['B_ID']."\" selected>".$row['B_NAME']." ,".$row['ADDRESS']." ,".$row['AREA']."</option>";
+                        }
+                        else{
+                            echo "<option value=\"".$row['B_ID']."\">".$row['B_NAME']." ,".$row['ADDRESS']." ,".$row['AREA']."</option>";
+                        }
                     }
                  ?>
             </select>
@@ -315,7 +323,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                    oci_execute($stid);
                  
                     while (($row = oci_fetch_array($stid, OCI_BOTH)) != false) {
-                        echo "<option value=\"".$row['BLOOD_GROUP']."\">".$row['BLOOD_GROUP']."</option>";
+                        if(isset($_POST['bg']) && $_POST['bg'] == $row['BLOOD_GROUP']) {
+                            echo "<option value=\"".$row['BLOOD_GROUP']."\" selected>".$row['BLOOD_GROUP']."</option>";
+                        }
+                        else {
+                            echo "<option value=\"".$row['BLOOD_GROUP']."\">".$row['BLOOD_GROUP']."</option>";
+                        }
                     }
                  ?>
             </select>
@@ -324,24 +337,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <span class="error" style="color: red;"><?php echo isset($error5) ? $error5 : '' ;?></span>
                 <span class="error" style="color: red;"><?php echo isset($nidErr) ? $nidErr : '' ;?></span>
             </p>
-            <input name="nid" class="form-field" type="text" placeholder="National id">
+            <input name="nid" class="form-field" type="text" placeholder="National id" value="<?php if(isset($_POST['nid'])) {echo htmlentities($_POST['nid']);} ?>">
 
             <p class="form-text">Phone :
                 <span class="error" style="color: red;"><?php echo isset($error6) ? $error6 : '' ;?></span>
                 <span class="error" style="color: red;"><?php echo isset($phoneErr) ? $phoneErr : '' ;?></span>
             </p>
-            <input name="phone" class="form-field" type="text" placeholder="Phone">
+            <input name="phone" class="form-field" type="text" placeholder="Phone" value="<?php if(isset($_POST['phone'])) {echo htmlentities($_POST['phone']);} ?>">
 
             <p class="form-text">Email :
                 <span class="error" style="color: red;"><?php echo isset($error7) ? $error7 : '' ;?></span>
                 <span class="error" style="color: red;"><?php echo isset($emailErr) ? $emailErr : '' ;?></span>
             </p>
-            <input name="email" class="form-field" type="text" placeholder="Email">
+            <input name="email" class="form-field" type="text" placeholder="Email" value="<?php if(isset($_POST['email'])) {echo htmlentities($_POST['email']);} ?>">
             
             <p class="form-text">Appointment Schedule :
                 <span class="error" style="color: red;"><?php echo isset($error8) ? $error8 : '' ;?></span>
+                <span class="error" style="color: red;"><?php echo isset($errorDate) ? $errorDate : '' ;?></span>
             </p>  
-            <input name="schedule" class="form-field" type="date" >
+            <input name="schedule" class="form-field" type="date" value="<?php if(isset($_POST['schedule'])) {echo htmlentities($_POST['schedule']);} ?>">
 
             <input type="submit" name="submit" id="submit" value="Become Donar" class="form-field">
         </form>

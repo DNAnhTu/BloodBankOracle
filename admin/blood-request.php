@@ -146,16 +146,14 @@
                                  <td style="padding: 5px;">
                                  <?php 
                                         $nombre_format_francais = number_format($row['BLOOD_AMOUNT_RQ'], 0, '.','.');
-                                        echo $nombre_format_francais;
+                                        echo $nombre_format_francais.""." ML";
                                     ?> 
-                                    ML
                                 </td>
                                 <td style="padding: 5px;">
                                     <?php 
-                                    $nombre_format_francais = number_format(($row['BLOOD_AMOUNT_RQ']/$row['BLOOD_AMOUNT'])*$row['PAID_AMOUNT'], 0, '.','.');
-                                    echo $nombre_format_francais;
+                                        $nombre_format_francais = number_format(($row['BLOOD_AMOUNT_RQ']/$row['BLOOD_AMOUNT'])*$row['PAID_AMOUNT'], 0, '.','.');
+                                        echo $nombre_format_francais.""." VND";
                                     ?> 
-                                    VND
                                 </td>
                                  <td style="padding: 5px;"> 
                                      <a id="edit" href="edit-request.php?e=<?php echo $row['BLOOD_REQUEST_ID'] ?>">Edit</a>
@@ -171,8 +169,6 @@
          </div>
      </div>                
  <?php
-
-
 ?> 
 </div>
 

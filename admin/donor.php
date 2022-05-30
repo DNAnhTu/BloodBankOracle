@@ -171,7 +171,6 @@
                     }
                     $cnt = 1;
                     while (($row = oci_fetch_array($stid, OCI_BOTH)) != false) {
-                        //branch
                         $conn = oci_connect('TESTORACLE', 'Tu01228671340', 'localhost/XE:BloodBank','Al32UTF8');
                         if (!$conn) {
                             $e = oci_error();

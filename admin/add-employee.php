@@ -117,15 +117,10 @@
             $phone = $_POST['phone'];
             $email = $_POST['email'];
             
-
-            
             $conn = oci_connect('TESTORACLE', 'Tu01228671340', 'localhost/XE:BloodBank', 'AL32UTF8');
-                
             $query = "INSERT INTO employee(emp_id, b_id, emp_name, emp_salary, emp_address, emp_area, emp_role, phone, email) VALUES (emp.nextval, $branch, '$name', '$salary', '$address', '$area', '$role', '$phone', '$email')";
-
-               $stid = oci_parse($conn, $query);
-               
-                $result = oci_execute($stid);
+            $stid = oci_parse($conn, $query);
+            $result = oci_execute($stid);
                 
                 if(!$result) {
                     echo "Failed !";
@@ -157,25 +152,25 @@
             <span class="error" style="color: red;"><?php echo isset($error1) ? $error1 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($nameErr) ? $nameErr : '' ;?></span>
         </p>
-        <input name="name" class="form-field" type="text" placeholder="Name">
+        <input name="name" class="form-field" type="text" placeholder="Name" value="<?php if(isset($_POST['name'])) {echo htmlentities($_POST['name']);} ?>">
         
         <p class="form-text">Salary : 
             <span class="error" style="color: red;"><?php echo isset($error2) ? $error2 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($salaryErr) ? $salaryErr : '' ;?></span>
         </p>
-        <input name="salary" class="form-field" type="text" placeholder="Salary">
+        <input name="salary" class="form-field" type="text" placeholder="Salary" value="<?php if(isset($_POST['salary'])) {echo htmlentities($_POST['salary']);} ?>">
         
         <p class="form-text">Area : 
             <span class="error" style="color: red;"><?php echo isset($error3) ? $error3 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($areaErr) ? $areaErr : '' ;?></span>
         </p>
-        <input name="area" class="form-field" type="text" placeholder="Area">
+        <input name="area" class="form-field" type="text" placeholder="Area" value="<?php if(isset($_POST['area'])) {echo htmlentities($_POST['area']);} ?>">
         
         <p class="form-text">Address : 
             <span class="error" style="color: red;"><?php echo isset($error4) ? $error4 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($addressErr) ? $addressErr : '' ;?></span>
         </p>
-        <textarea name="address" id="textarea" class="form-field" cols="30" rows="10" placeholder="Address"></textarea>
+        <textarea name="address" id="textarea" class="form-field" cols="30" rows="10" placeholder="Address"><?php if(isset($_POST['address'])) {echo htmlentities($_POST['address']);} ?></textarea>
         
         <p id="pcat" class="form-text">Select Branch : </p>
              <select name="branch" style="width: 100%;">
@@ -186,7 +181,12 @@
                    oci_execute($stid);
                  
                     while (($row = oci_fetch_array($stid, OCI_BOTH)) != false) {
-                        echo "<option value=\"".$row['B_ID']."\">".$row['B_NAME']." ,".$row['ADDRESS']." ,".$row['AREA']."</option>";
+                        if(isset($_POST['branch']) && $_POST['branch'] == $row['B_ID']) {
+                            echo "<option value=\"".$row['B_ID']."\" selected>".$row['B_NAME']." ,".$row['ADDRESS']." ,".$row['AREA']."</option>";
+                        }
+                        else{
+                            echo "<option value=\"".$row['B_ID']."\">".$row['B_NAME']." ,".$row['ADDRESS']." ,".$row['AREA']."</option>";
+                        }
                     }
                  ?>
             </select>
@@ -195,19 +195,19 @@
             <span class="error" style="color: red;"><?php echo isset($error5) ? $error5 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($roleErr) ? $roleErr : '' ;?></span>
         </p>
-        <input name="role" class="form-field" type="text" placeholder="Role">
+        <input name="role" class="form-field" type="text" placeholder="Role" value="<?php if(isset($_POST['role'])) {echo htmlentities($_POST['role']);} ?>">
         
         <p class="form-text">Phone : 
             <span class="error" style="color: red;"><?php echo isset($error6) ? $error6 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($phoneErr) ? $phoneErr : '' ;?></span>
         </p>
-        <input name="phone" class="form-field" type="text" placeholder="Phone">
+        <input name="phone" class="form-field" type="text" placeholder="Phone" value="<?php if(isset($_POST['phone'])) {echo htmlentities($_POST['phone']);} ?>">
         
         <p class="form-text">Email : 
             <span class="error" style="color: red;"><?php echo isset($error7) ? $error7: '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($emailErr) ? $emailErr : '' ;?></span>
         </p>
-        <input name="email" class="form-field" type="text" placeholder="Email">
+        <input name="email" class="form-field" type="text" placeholder="Email" value="<?php if(isset($_POST['email'])) {echo htmlentities($_POST['email']);} ?>">
         
         <br>
         <input type="submit" name="submit" id="submit" value="Add New Employee" class="form-field">

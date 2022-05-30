@@ -18,6 +18,16 @@
             {
                 $bloodgroupErr = "Only letters and white spacing allowed";
             }
+            else{
+                $query = "SELECT * FROM blood WHERE BLOOD_GROUP = '$bloodgroup'";
+                $stmt = oci_parse($conn, $query);
+                oci_execute($stmt);
+                $row = oci_fetch_array($stmt, OCI_ASSOC+OCI_RETURN_NULLS);
+                if($row)
+                {
+                    $bloodgroupExist = "This blood group already exists";
+                }
+            }
         }
 
         if (empty($_POST["bloodamount"])) 
@@ -93,20 +103,21 @@
         <p class="form-text">Blood Group : 
             <span class="error" style="color: red;"><?php echo isset($error1) ? $error1 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($bloodgroupErr) ? $bloodgroupErr : '' ;?></span>
+            <span class="error" style="color: red;"><?php echo isset($bloodgroupExist) ? $bloodgroupExist : '' ;?></span>
         </p>
-        <input name="bloodgroup" class="form-field" type="text" placeholder="Blood Group">
+        <input name="bloodgroup" class="form-field" type="text" placeholder="Blood Group" value="<?php if(isset($_POST['bloodgroup'])) {echo htmlentities($_POST['bloodgroup']);} ?>">
         
         <p class="form-text">Blood Amount : 
             <span class="error" style="color: red;"><?php echo isset($error2) ? $error2 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($bloodamountErr) ? $bloodamountErr : '' ;?></span>
         </p>
-        <textarea name="bloodamount" id="textarea" class="form-field" cols="30" rows="10" placeholder="Blood Amount"></textarea>
+        <input name="bloodamount" class="form-field" type="text" placeholder="Blood Amount" value="<?php if(isset($_POST['bloodamount'])) {echo htmlentities($_POST['bloodamount']);} ?>">
         
         <p class="form-text">Paid Amount : 
             <span class="error" style="color: red;"><?php echo isset($error3) ? $error3 : '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($padiamountErr) ? $padiamountErr : '' ;?></span>
         </p>
-        <input name="paidamount" class="form-field" type="text" placeholder="Paid Amount">
+        <input name="paidamount" class="form-field" type="text" placeholder="Paid Amount" value="<?php if(isset($_POST['paidamount'])) {echo htmlentities($_POST['paidamount']);} ?>">
         <br>
         <input type="submit" name="submit" id="submit" value="Add Blood" class="form-field">
         

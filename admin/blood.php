@@ -88,6 +88,9 @@
             $stid = oci_parse($conn, 'SELECT * FROM blood ORDER BY blood_group ASC');
             oci_execute($stid);
         ?>
+        <div style="margin-left: 10px; margin-bottom:10px; color:red; font-family: -apple-system,system-ui,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;">
+            *Note: If delete button disable that mean this blood group is in blood request table
+        </div>
             <table cellpadding="0" cellspacing="0" border="0"  style="width:100%;" class="datatable-1 table table-bordered table-striped" id="table-blood">
                 <thead>
                     <tr>
@@ -101,7 +104,7 @@
                 </thead>
                     <?php
                        $cnt = 1;
-                        while (($row = oci_fetch_array($stid, OCI_BOTH)) != false) {
+                        while (($row = oci_fetch_array($stid, OCI_BOTH)) != false){
                         ?>
                             <tr>
                                 <td style="padding: 20px;"><?php echo htmlentities($cnt); ?></td>
@@ -124,7 +127,21 @@
                                     <a id="edit" href="edit-blood.php?e=<?php echo $row['BLOOD_ID'] ?>">Edit</a>
                                 </td>
                                 <td style="padding: 20px;">
-                                    <a id="delete" href="blood.php?p=<?php echo $row['BLOOD_ID'] ?>&del=delete" onClick="return confirm('Are you sure you want to delete?')">Delete</a>
+                                    <?php
+                                        $conn = oci_connect('TESTORACLE', 'Tu01228671340', 'localhost/XE:BloodBank','Al32UTF8');
+                                        if (!$conn) {
+                                            $e = oci_error();
+                                            trigger_error(htmlentities($e['message'], ENT_QUOTES), E_USER_ERROR);
+                                        }
+                                        $std = oci_parse($conn, "SELECT BLOOD_GROUP FROM BLOOD WHERE NOT EXISTS (SELECT * FROM blood_request WHERE blood.blood_group = blood_request.blood_group)");
+                                        oci_execute($std);
+                                        
+                                        while (($blood_request = oci_fetch_array($std, OCI_BOTH)) != false){
+                                            if($row['BLOOD_GROUP'] == $blood_request['BLOOD_GROUP']){
+                                                echo '<a id="delete" onclick="return confirm(\'You Want To Delete This Item ?\');" href="blood.php?p='.$row['BLOOD_ID'].'">Delete</a>';
+                                            }
+                                        }
+                                    ?>        
                                 </td>
                             </tr>
                         <?php $cnt ++;

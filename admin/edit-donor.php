@@ -14,8 +14,6 @@
     }
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        //check validation name with vietnamese language
-        
         if (empty($_POST["name"])) 
         {
             $error1 = "*Required";
@@ -27,7 +25,6 @@
             }
         }
         
-
         if(empty($_POST["address"])){
             $error2 = "*Required";
         }
@@ -38,13 +35,13 @@
                 $addressErr = "Invalid Address";
             }
         }
-        
+            
         if (empty($_POST["area"])) 
         {
             $error3 = "*Required";
-            } 
-            else {
-                $area = test_input($_POST["area"]);
+        } 
+        else {
+            $area = test_input($_POST["area"]);
             if (!preg_match("/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]*$/",$area)) 
             {
                 $areaErr = "Invalid Area";
@@ -54,9 +51,9 @@
         if (empty($_POST["sub-area"])) 
         {
             $error4 = "*Required";
-            } 
-            else {
-                $sub_area = test_input($_POST["sub-area"]);
+        } 
+        else {
+            $sub_area = test_input($_POST["sub-area"]);
             if (!preg_match("/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]*$/",$sub_area)) 
             {
                 $sub_areaErr = "Invalid Sub Area";
@@ -66,27 +63,28 @@
         if (empty($_POST["nid"])) 
         {
             $error5 = "*Required";
-            } 
-            else {
-                $nid = test_input($_POST["nid"]);
+        } 
+        else {
+            $nid = test_input($_POST["nid"]);
             if (!preg_match("/^[0-9]*$/",$nid)) 
             {
                 $nidErr = "Only numbers";
             }
+                
         }
-        
+            
         if (empty($_POST["phone"])) 
         {
             $error6 = "*Required";
-            } 
-            else {
-                $phone = test_input($_POST["phone"]);
+        } 
+        else {
+            $phone = test_input($_POST["phone"]);
             if (!preg_match("/(03|05|07|08|09|01[2|6|8|9])+([0-9]{8})\b/",$phone)) 
             {
                 $phoneErr = "Phone number should contain only numbers";
             }
         }
-    
+        
         if (empty($_POST["email"])) 
         {
             $error7 = "*Required";
@@ -99,12 +97,15 @@
             }
         }
 
-        if(empty($nameErr) && empty($addressErr) && empty($areaErr) && empty($sub_areaErr) && empty($nidErr) && empty($phoneErr) && empty($emailErr)){
+        if (empty($_POST["schedule"]))
         {
+            $error8 = "*Required";
+        }
+        
+        if(empty($nameErr) && empty($addressErr) && empty($areaErr) && empty($sub_areaErr) && empty($nidErr) && empty($phoneErr) && empty($emailErr)){
             edit_donor();
         }
-    }
-}
+    }   
 
     function edit_donor()
     {
@@ -132,8 +133,6 @@
                 if(!$result) {
                     echo "Failed !";
                 }else {
-                    //echo "Donor Updated!";
-                    //header('Location: donor.php');
                     echo "<script>window.location.href='donor.php';</script>";
                 }
 
@@ -245,6 +244,7 @@
         <p class="form-text">National ID : 
             <span class="error" style="color: red;"><?php echo isset($error5) ? $error5: '' ;?></span>
             <span class="error" style="color: red;"><?php echo isset($nidErr) ? $nidErr : '' ;?></span>
+            <span class="error" style="color: red;"><?php echo isset($nidExist) ? $nidExist : '' ;?></span>
         </p>
         <input name="nid" class="form-field" type="text" placeholder="National id" value="<?php echo $row['NATIONAL_ID']?>">
         
@@ -263,7 +263,8 @@
         <p class="form-text">Appointment Schedule : 
         </p>  
         <input name="schedule" class="form-field" type="date" value="<?php echo date('Y-m-d', strtotime($row['SCHEDULE']))?>">
-        
+            <span class="error" style="color: red;"><?php echo isset($error8) ? $error8 : '' ;?></span>
+
         <br>
         <input type="submit" name="submit" id="submit" value="Update Donor" class="form-field">
         
